@@ -3,11 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>org.example</groupId>
     <artifactId>simpleframework</artifactId>
     <version>1.0-SNAPSHOT</version>
-
+    <!--tomcat需要war包运行，所以需要指定为war包-->
+    <packaging>war</packaging>
+    <properties>
+        <profile.build.sourceEncoding>UTF-8</profile.build.sourceEncoding>
+    </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
         <dependency>
@@ -25,5 +28,40 @@
         </dependency>
 
     </dependencies>
+    <!--编译配置-->
+    <build>
+        <!--最终的项目文件名-->
+        <finalName>simpleframework</finalName>
+        <!--插件管理-->
+        <pluginManagement>
+            <plugins>
+                <!--maven的编译插件-->
+                <plugin>
+                    <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-plugin-api -->
+                    <groupId>org.apache.maven</groupId>
+                    <artifactId>maven-plugin-api</artifactId>
+                    <version>3.8.4</version>
+                    <!--插件配置-->
+                    <configuration>
+                        <!--原来项目的jdk版本-->
+                        <source>8</source>
+                        <!--编译后项目的jdk版本-->
+                        <target>8</target>
+                    </configuration>
+                </plugin>
+                <!--tomcat7插件-->
+                <plugin>
+                    <!-- https://mvnrepository.com/artifact/org.apache.tomcat.maven/tomcat7-maven-plugin -->
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>2.2</version>
+                    <!--设置tomcat里的项目名-->
+                    <configuration>
+                        <path>/${project.artifactId}</path>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
