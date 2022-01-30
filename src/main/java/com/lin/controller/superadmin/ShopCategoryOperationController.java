@@ -3,6 +3,7 @@ package com.lin.controller.superadmin;
 import com.lin.entity.bo.ShopCategory;
 import com.lin.entity.dto.Result;
 import com.lin.service.solo.ShopCategoryService;
+import org.simpleframework.croe.annotation.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author lin
  * @date 2022/1/13 23:08
  **/
+@Controller
 public class ShopCategoryOperationController {
     private ShopCategoryService shopCategoryService;
     public Result<Boolean> addShopCategory(HttpServletRequest req, HttpServletResponse resp){

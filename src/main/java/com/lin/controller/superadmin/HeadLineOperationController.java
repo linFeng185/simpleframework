@@ -3,6 +3,7 @@ package com.lin.controller.superadmin;
 import com.lin.entity.bo.HeadLine;
 import com.lin.entity.dto.Result;
 import com.lin.service.solo.HeadLineService;
+import org.simpleframework.croe.annotation.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author lin
  * @date 2022/1/13 23:04
  **/
+@Controller
 public class HeadLineOperationController {
     private HeadLineService headLineService;
     public Result<Boolean> addHeadLine(HttpServletRequest req, HttpServletResponse resp){

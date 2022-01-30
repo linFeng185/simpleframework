@@ -7,6 +7,7 @@ import com.lin.entity.dto.Result;
 import com.lin.service.combine.HeadLineShopCategoryCombineService;
 import com.lin.service.solo.HeadLineService;
 import com.lin.service.solo.ShopCategoryService;
+import org.simpleframework.croe.annotation.Service;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @author lin
  * @date 2022/1/13 22:36
  **/
+@Service
 public class HeadLineShopCategoryCombineServiceImpl implements HeadLineShopCategoryCombineService {
 
     private HeadLineService headLineService;

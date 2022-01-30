@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
@@ -84,7 +85,12 @@ public class ClassUtil {
                 //从class文件的绝对路径里提取出包含了package的类名
                 //通过反射机制获取对应的Class对象并加入到classSet里
                 //如D:\projects\simpleframework\src\main\java\com\lin\entity\dto\MainPageInfoDTO.java
+                absoluteFilePath = absoluteFilePath.replace(File.separator, ".");
+                String className = absoluteFilePath.substring(absoluteFilePath.indexOf(packageName));
+                className = className.substring(0,className.lastIndexOf("."));
                 //需要弄成com.lin.entity.dto.MainPageInfoDTO
+                Class<?> targetClass = loadClass(className);
+                emptyClassSet.add(targetClass);
             }
         });
         if (files != null){
@@ -95,12 +101,44 @@ public class ClassUtil {
     }
 
     /**
+     * 获取class对象
+     * @param className class全名，class类名+package名
+     * @return
+     */
+    public static Class<?> loadClass(String className){
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            log.error("load class error:",e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * 获取类加载器
      * @return
      */
     public static ClassLoader getClassLoader(){
         //程序是通过线程来执行的，获取到当前执行的方法的线程，通过线程所属的加载器获取到程序的资源信息
         return Thread.currentThread().getContextClassLoader();
+    }
+
+    /**
+     * 实例化class
+     * @param clazz class的类型
+     * @param accessible 是否支持调用私有的构造函数
+     * @param <T>
+     * @return 实例化的类
+     */
+    public static<T> T newInstance(Class<?> clazz,boolean accessible){
+        try {
+            Constructor<?> constructor = clazz.getDeclaredConstructor();
+            constructor.setAccessible(accessible);
+            return (T)constructor.newInstance();
+        } catch (Exception e) {
+            log.error("newInstance error",e);
+            throw new RuntimeException(e);
+        }
     }
 
     public static void main(String[] args) {
