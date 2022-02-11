@@ -11,10 +11,7 @@ import org.simpleframework.util.ClassUtil;
 import org.simpleframework.util.ValidationUtil;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -97,5 +94,94 @@ public class BeanContainer {
             }
         }
         loaded = true;
+    }
+
+    /**
+     * 增加一个bean
+     * @param clazz bean的class对象
+     * @param bean 实例化的bean
+     * @return
+     */
+    public Object addBean(Class<?> clazz,Object bean){
+        return beanMap.put(clazz,bean);
+    }
+
+    /**
+     * 删除一个bean
+     * @param clazz bean的class对象
+     * @return
+     */
+    public Object removeBean(Class<?> clazz){
+        return beanMap.remove(clazz);
+    }
+
+    /**
+     * 根据class对象获取bean
+     * @param clazz bean的class对象
+     * @return
+     */
+    public Object getBean(Class<?> clazz){
+        return beanMap.get(clazz);
+    }
+
+    /**
+     * 获取容器里所有的Class对象集合
+     * @return
+     */
+    public Set<Class<?>>getClasses(){
+        return beanMap.keySet();
+    }
+
+    /**
+     * 获取容器里所有的bean
+     * @return
+     */
+    public Set<Object> getBeans(){
+        return new HashSet<>(beanMap.values());
+    }
+
+    /**
+     * 通过注解筛选出容器里的Class对象
+     * @param annotation
+     * @return
+     */
+    public Set<Class<?>> getClassesByAnnotation(Class<? extends Annotation> annotation){
+        //获取beanMap所有的class对象
+        Set<Class<?>> keySet = getClasses();
+        if(ValidationUtil.isEmpty(keySet)){
+            log.warn("nothing in beanMap");
+            return null;
+        }
+        //筛选出被该注解标记的Class对象，并放到结果集中
+        Set<Class<?>> res = new HashSet<>();
+        for (Class<?> clazz : keySet){
+            if(clazz.isAnnotationPresent(annotation)){
+                res.add(clazz);
+            }
+        }
+        return res.isEmpty()?null:res;
+    }
+
+    /**
+     * 通过接口或者父类获取其实现类或子类的class集合，不包括其本身
+     * @param interfaceOrClass 接口class或者父类class
+     * @return
+     */
+    public Set<Class<?>> getClassesBySuper(Class<?> interfaceOrClass){
+        //获取beanMap所有的class对象
+        Set<Class<?>> keySet = getClasses();
+        if(ValidationUtil.isEmpty(keySet)){
+            log.warn("nothing in beanMap");
+            return null;
+        }
+        //筛选出接口的实现类或者类的子类的Class对象，并放到结果集中
+        Set<Class<?>> res = new HashSet<>();
+        for (Class<?> clazz : keySet){
+            //判断keySet里的class对象是否是接口的实现类或者类的子类
+            if(interfaceOrClass.isAssignableFrom(clazz) && !clazz.equals(interfaceOrClass)){
+                res.add(clazz);
+            }
+        }
+        return res.isEmpty()?null:res;
     }
 }

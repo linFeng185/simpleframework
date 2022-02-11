@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2022/1/13 22:36
  **/
 @Service
-public class HeadLineShopCategoryCombineServiceImpl implements HeadLineShopCategoryCombineService {
+public class HeadLineShopCategoryCombineServiceImpl2 implements HeadLineShopCategoryCombineService {
 
     @Autowired
     private HeadLineService headLineService;
